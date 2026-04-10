@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExperienceWithJair — Expanded UI Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --clay:#C1785A; --clay-l:#F5E6DE; --clay-d:#8A4A30;
+    --moss:#5C7A5E; --moss-l:#DDE8DD; --moss-d:#3A5A3C;
+    --amber:#D4956A; --amber-l:#FAE8D5; --amber-d:#8A5A30;
+    --bark:#3B2F2F; --cream:#FAF6F0; --sand:#E8D5C0;
+    --linen:#F2EAE0; --muted:#8A7A72; --white:#FFFFFF;
+    --sage:#A8B89A; --red:#DC2626; --green:#16A34A;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Nunito',sans-serif; background:var(--cream); color:var(--bark); padding:2rem; }
+
+  .page-header { margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:2px solid var(--sand); display:flex; justify-content:space-between; align-items:flex-end; }
+  .page-title { font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--clay); }
+  .page-sub { font-size:0.82rem; color:var(--muted); margin-top:0.3rem; }
+  .artifact-tag { font-size:0.68rem; font-weight:700; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; }
+
+  .section { margin-bottom:2.5rem; }
+  .section-label { font-size:0.68rem; font-weight:700; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; margin-bottom:1rem; }
+
+  .kit-block { background:var(--white); border-radius:12px; border:1px solid var(--sand); padding:1.5rem; margin-bottom:1rem; }
+  .kit-block-title { font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:1rem; padding-bottom:0.6rem; border-bottom:1px solid var(--linen); }
+
+  .row { display:flex; gap:0.75rem; align-items:flex-start; flex-wrap:wrap; }
+  .col2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .col3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+
+  /* NAV COMPONENT */
+  .nav-demo { background:var(--linen); border-radius:10px; overflow:hidden; border:1px solid var(--sand); }
+  .nav-desktop { padding:0.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; background:var(--linen); }
+  .nav-logo { font-family:'Playfair Display',serif; font-size:1rem; color:var(--clay); font-weight:700; }
+  .nav-links { display:flex; gap:1.5rem; }
+  .nav-link { font-size:0.82rem; color:var(--muted); font-weight:600; cursor:pointer; }
+  .nav-link.active { color:var(--clay); }
+  .nav-cta { background:var(--clay); color:var(--white); padding:0.4rem 1rem; border-radius:6px; font-size:0.8rem; font-weight:700; }
+  .nav-mobile { padding:0.75rem 1rem; display:flex; align-items:center; justify-content:space-between; background:var(--bark); }
+  .hamburger { display:flex; flex-direction:column; gap:4px; cursor:pointer; }
+  .hamburger span { display:block; width:22px; height:2px; background:var(--white); border-radius:2px; }
+
+  /* FORM COMPONENTS */
+  .form-group { margin-bottom:1rem; }
+  .form-label { display:block; font-size:0.8rem; font-weight:700; color:var(--bark); margin-bottom:0.4rem; }
+  .form-label .required { color:var(--clay); margin-left:2px; }
+  .form-input { width:100%; padding:0.6rem 0.85rem; border:1.5px solid var(--sand); border-radius:8px; font-family:'Nunito',sans-serif; font-size:0.88rem; color:var(--bark); background:var(--white); }
+  .form-input:focus { outline:none; border-color:var(--clay); }
+  .form-input.error { border-color:var(--red); }
+  .form-input.success { border-color:var(--green); }
+  .form-input::placeholder { color:var(--muted); }
+  .form-hint { font-size:0.72rem; color:var(--muted); margin-top:0.3rem; }
+  .form-error { font-size:0.72rem; color:var(--red); margin-top:0.3rem; font-weight:600; }
+  .form-success-msg { font-size:0.72rem; color:var(--green); margin-top:0.3rem; font-weight:600; }
+  textarea.form-input { min-height:100px; resize:vertical; }
+  select.form-input { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%238A7A72' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 0.9rem center; }
+
+  /* BUTTONS */
+  .btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.6rem 1.3rem; border-radius:8px; font-family:'Nunito',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; border:none; }
+  .btn-primary { background:var(--clay); color:var(--white); }
+  .btn-secondary { background:transparent; color:var(--clay); border:2px solid var(--clay); }
+  .btn-ghost { background:var(--linen); color:var(--bark); }
+  .btn-moss { background:var(--moss); color:var(--white); }
+  .btn-disabled { background:var(--sand); color:var(--muted); cursor:not-allowed; }
+  .btn-sm { padding:0.4rem 0.9rem; font-size:0.78rem; }
+  .btn-lg { padding:0.8rem 1.8rem; font-size:0.95rem; }
+
+  /* ICON BUTTONS */
+  .icon-btn { width:38px; height:38px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; border:1.5px solid var(--sand); background:var(--white); font-size:1rem; }
+
+  /* CARDS */
+  .service-card { background:var(--white); border-radius:12px; border:1px solid var(--sand); overflow:hidden; }
+  .service-card-img { height:80px; display:flex; align-items:center; justify-content:center; font-size:0.75rem; color:rgba(255,255,255,0.7); font-style:italic; }
+  .service-card-body { padding:1rem; }
+  .service-card-tag { display:inline-block; font-size:0.68rem; font-weight:700; padding:0.2rem 0.55rem; border-radius:4px; margin-bottom:0.5rem; }
+  .service-card-title { font-family:'Playfair Display',serif; font-size:1rem; color:var(--bark); margin-bottom:0.4rem; }
+  .service-card-text { font-size:0.8rem; color:var(--muted); line-height:1.5; margin-bottom:0.75rem; }
+
+  /* TESTIMONIAL CARD */
+  .testimonial { background:var(--white); border-radius:12px; border:1px solid var(--sand); padding:1.2rem; }
+  .testimonial-stars { color:var(--amber); font-size:0.85rem; margin-bottom:0.5rem; }
+  .testimonial-quote { font-size:0.85rem; color:var(--bark); line-height:1.55; margin-bottom:0.9rem; font-style:italic; }
+  .testimonial-author { display:flex; align-items:center; gap:0.6rem; }
+  .testimonial-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:var(--white); flex-shrink:0; }
+  .testimonial-name { font-size:0.82rem; font-weight:700; color:var(--bark); }
+  .testimonial-role { font-size:0.72rem; color:var(--muted); }
+
+  /* PRICING CARD */
+  .pricing-card { background:var(--white); border-radius:12px; border:1px solid var(--sand); padding:1.2rem; }
+  .pricing-card.featured { border-color:var(--clay); border-width:2px; }
+  .pricing-badge { font-size:0.68rem; font-weight:700; background:var(--clay); color:var(--white); padding:0.2rem 0.6rem; border-radius:999px; display:inline-block; margin-bottom:0.5rem; }
+  .pricing-name { font-family:'Playfair Display',serif; font-size:1rem; color:var(--bark); margin-bottom:0.3rem; }
+  .pricing-price { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--clay); }
+  .pricing-period { font-size:0.78rem; color:var(--muted); }
+  .pricing-divider { height:1px; background:var(--sand); margin:0.75rem 0; }
+  .pricing-feature { display:flex; gap:0.5rem; font-size:0.8rem; color:var(--bark); margin-bottom:0.4rem; }
+  .pricing-check { color:var(--moss); font-size:0.75rem; flex-shrink:0; margin-top:0.1rem; }
+
+  /* INPUT STATES */
+  .state-row { display:flex; flex-direction:column; gap:0.6rem; }
+  .state-label { font-size:0.72rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; }
+
+  /* BADGES */
+  .badge { display:inline-block; padding:0.22rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; }
+  .badge-clay { background:var(--clay-l); color:var(--clay-d); }
+  .badge-moss { background:var(--moss-l); color:var(--moss-d); }
+  .badge-amber { background:var(--amber-l); color:var(--amber-d); }
+  .badge-bark { background:var(--bark); color:var(--white); }
+  .badge-new { background:var(--clay); color:var(--white); }
+
+  /* DIVIDER */
+  .divider { height:1px; background:var(--sand); margin:2rem 0; }
+
+  /* MOBILE CARD */
+  .mobile-frame { width:200px; background:var(--bark); border-radius:20px; padding:1rem 0.6rem; margin:0 auto; }
+  .mobile-screen { background:var(--cream); border-radius:12px; padding:0.75rem; min-height:320px; }
+  .mobile-nav { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; }
+  .mobile-logo { font-family:'Playfair Display',serif; font-size:0.65rem; color:var(--clay); }
+  .mobile-hamburger { display:flex; flex-direction:column; gap:3px; }
+  .mobile-hamburger span { display:block; width:14px; height:1.5px; background:var(--bark); border-radius:1px; }
+  .mobile-hero { background:var(--bark); border-radius:8px; padding:0.75rem; margin-bottom:0.5rem; }
+  .mobile-hero h3 { font-family:'Playfair Display',serif; font-size:0.7rem; color:var(--white); margin-bottom:0.3rem; line-height:1.3; }
+  .mobile-hero p { font-size:0.55rem; color:var(--sand); margin-bottom:0.5rem; }
+  .mobile-cta { background:var(--clay); color:var(--white); font-size:0.55rem; font-weight:700; padding:0.35rem 0.65rem; border-radius:5px; display:inline-block; }
+  .mobile-card { background:var(--white); border-radius:6px; border:1px solid var(--sand); padding:0.5rem; margin-bottom:0.4rem; }
+  .mobile-card-title { font-size:0.6rem; font-weight:700; color:var(--bark); margin-bottom:0.2rem; }
+  .mobile-card-text { font-size:0.5rem; color:var(--muted); }
+
+  /* SPACING SCALE */
+  .spacing-viz { display:flex; flex-direction:column; gap:0.6rem; }
+  .spacing-item { display:flex; align-items:center; gap:0.75rem; }
+  .spacing-block { background:var(--clay); border-radius:3px; height:12px; opacity:0.65; }
+  .spacing-meta { font-size:0.75rem; color:var(--muted); }
+
+  /* TYPOGRAPHY SCALE */
+  .type-scale { display:flex; flex-direction:column; gap:0.75rem; }
+  .type-item { display:flex; align-items:baseline; gap:1rem; padding-bottom:0.75rem; border-bottom:1px solid var(--linen); }
+  .type-meta { font-size:0.7rem; color:var(--muted); min-width:130px; flex-shrink:0; }
+
+  footer { text-align:center; font-size:0.7rem; color:var(--muted); margin-top:2rem; padding-top:1rem; border-top:1px solid var(--sand); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="page-title">Expanded UI Kit — ExperienceWithJair</div>
+    <div class="page-sub">Navigation · Forms · Buttons · Cards · States · Mobile · Spacing</div>
+  </div>
+  <div class="artifact-tag">Capstone Development · Artifact</div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="section">
+  <div class="section-label">Navigation Components</div>
+  <div class="kit-block">
+    <div class="kit-block-title">Desktop Navigation</div>
+    <div class="nav-demo">
+      <div class="nav-desktop">
+        <div class="nav-logo">ExperienceWithJair</div>
+        <div class="nav-links">
+          <span class="nav-link active">Home</span>
+          <span class="nav-link">Services</span>
+          <span class="nav-link">Work</span>
+          <span class="nav-link">About</span>
+        </div>
+        <div class="nav-cta">Book a Call</div>
+      </div>
+    </div>
+  </div>
+  <div class="kit-block">
+    <div class="kit-block-title">Mobile Navigation (Collapsed)</div>
+    <div class="nav-demo">
+      <div class="nav-mobile">
+        <div class="nav-logo" style="color:var(--amber);">ExperienceWithJair</div>
+        <div class="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUTTONS -->
+<div class="section">
+  <div class="section-label">Button System</div>
+  <div class="kit-block">
+    <div class="kit-block-title">Button Variants</div>
+    <div class="row" style="margin-bottom:1rem;">
+      <button class="btn btn-primary">Get a Free Quote</button>
+      <button class="btn btn-secondary">See My Work</button>
+      <button class="btn btn-ghost">Learn More</button>
+      <button class="btn btn-moss">Book a Call</button>
+      <button class="btn btn-disabled" disabled>Unavailable</button>
+    </div>
+    <div class="kit-block-title" style="margin-top:1rem;">Sizes</div>
+    <div class="row" style="align-items:center;">
+      <button class="btn btn-primary btn-sm">Small CTA</button>
+      <button class="btn btn-primary">Default CTA</button>
+      <button class="btn btn-primary btn-lg">Large CTA</button>
+    </div>
+    <div class="kit-block-title" style="margin-top:1rem;">Icon Buttons</div>
+    <div class="row">
+      <div class="icon-btn">✕</div>
+      <div class="icon-btn">↗</div>
+      <div class="icon-btn">☰</div>
+      <div class="icon-btn" style="background:var(--clay); border-color:var(--clay); color:white;">→</div>
+    </div>
+  </div>
+</div>
+
+<!-- BADGES -->
+<div class="section">
+  <div class="section-label">Badges & Labels</div>
+  <div class="kit-block">
+    <div class="row">
+      <span class="badge badge-clay">Small Business</span>
+      <span class="badge badge-moss">Research-Backed</span>
+      <span class="badge badge-amber">DFW Area</span>
+      <span class="badge badge-bark">Mobile-First</span>
+      <span class="badge badge-new">New</span>
+    </div>
+  </div>
+</div>
+
+<!-- FORM COMPONENTS -->
+<div class="section">
+  <div class="section-label">Form Components</div>
+  <div class="col2">
+    <div class="kit-block">
+      <div class="kit-block-title">Contact Form</div>
+      <div class="form-group">
+        <label class="form-label">Your Name <span class="required">*</span></label>
+        <input class="form-input" type="text" placeholder="e.g. Maria Gonzalez" />
+        <div class="form-hint">First and last name</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address <span class="required">*</span></label>
+        <input class="form-input" type="email" placeholder="you@yourbusiness.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Business Type</label>
+        <select class="form-input">
+          <option>Select your type...</option>
+          <option>Restaurant / Food</option>
+          <option>Retail / Shop</option>
+          <option>Professional Service</option>
+          <option>Health & Wellness</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tell me about your project</label>
+        <textarea class="form-input" placeholder="What does your business do? What's your main goal for the website?"></textarea>
+      </div>
+      <button class="btn btn-primary" style="width:100%;">Send My Request →</button>
+    </div>
+
+    <div class="kit-block">
+      <div class="kit-block-title">Input States</div>
+      <div class="state-row">
+        <div>
+          <div class="state-label" style="margin-bottom:0.4rem;">Default</div>
+          <input class="form-input" type="text" placeholder="Enter your name" />
+        </div>
+        <div>
+          <div class="state-label" style="margin-bottom:0.4rem;">Filled</div>
+          <input class="form-input" type="text" value="Jair Rodriguez" />
+        </div>
+        <div>
+          <div class="state-label" style="margin-bottom:0.4rem;">Error</div>
+          <input class="form-input error" type="email" value="not-an-email" />
+          <div class="form-error">Please enter a valid email address</div>
+        </div>
+        <div>
+          <div class="state-label" style="margin-bottom:0.4rem;">Success</div>
+          <input class="form-input success" type="text" value="jair@example.com" />
+          <div class="form-success-msg">Looks good!</div>
+        </div>
+        <div>
+          <div class="state-label" style="margin-bottom:0.4rem;">Disabled</div>
+          <input class="form-input" type="text" value="Cannot edit" disabled style="opacity:0.5; cursor:not-allowed;" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARDS -->
+<div class="section">
+  <div class="section-label">Card Components</div>
+  <div class="col3">
+
+    <!-- Service Card -->
+    <div class="service-card">
+      <div class="service-card-img" style="background:linear-gradient(135deg,#C1785A,#D4956A);">[ Project Image ]</div>
+      <div class="service-card-body">
+        <span class="service-card-tag" style="background:var(--clay-l); color:var(--clay-d);">Landing Page</span>
+        <div class="service-card-title">Conversion-Focused Design</div>
+        <div class="service-card-text">A research-backed landing page that turns visitors into paying customers.</div>
+        <button class="btn btn-primary btn-sm">Get Started →</button>
+      </div>
+    </div>
+
+    <!-- Testimonial Card -->
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-quote">"Jair completely transformed our online presence. We started getting quote requests within the first week."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:var(--clay);">MG</div>
+        <div>
+          <div class="testimonial-name">Maria Gonzalez</div>
+          <div class="testimonial-role">Owner, Flores Bakery</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing Card -->
+    <div class="pricing-card featured">
+      <div class="pricing-badge">Most Popular</div>
+      <div class="pricing-name">Landing Page</div>
+      <div><span class="pricing-price">$799</span><span class="pricing-period"> one-time</span></div>
+      <div class="pricing-divider"></div>
+      <div class="pricing-feature"><span class="pricing-check">✓</span> Custom design (not a template)</div>
+      <div class="pricing-feature"><span class="pricing-check">✓</span> Mobile-first, fully responsive</div>
+      <div class="pricing-feature"><span class="pricing-check">✓</span> Contact form + CTA setup</div>
+      <div class="pricing-feature"><span class="pricing-check">✓</span> Delivered in 2 weeks</div>
+      <div class="pricing-feature"><span class="pricing-check">✓</span> 1 revision round included</div>
+      <div style="margin-top:0.75rem;">
+        <button class="btn btn-primary" style="width:100%; justify-content:center;">Get a Free Quote</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MOBILE PREVIEW -->
+<div class="section">
+  <div class="section-label">Mobile Component Preview</div>
+  <div class="kit-block">
+    <div class="col2">
+      <div>
+        <div class="kit-block-title">Mobile Layout (320px)</div>
+        <div class="mobile-frame">
+          <div class="mobile-screen">
+            <div class="mobile-nav">
+              <div class="mobile-logo">ExperienceWithJair</div>
+              <div class="mobile-hamburger"><span></span><span></span><span></span></div>
+            </div>
+            <div class="mobile-hero">
+              <h3>Your Business,<br>Built to Convert.</h3>
+              <p>Research-backed websites for small businesses.</p>
+              <div class="mobile-cta">Get a Free Quote →</div>
+            </div>
+            <div class="mobile-card">
+              <div class="mobile-card-title">🧭 Confusing navigation</div>
+              <div class="mobile-card-text">Visitors leave if they can't find what they need</div>
+            </div>
+            <div class="mobile-card">
+              <div class="mobile-card-title">📉 No clear CTA</div>
+              <div class="mobile-card-text">38.5% of sites have no visible call-to-action</div>
+            </div>
+            <div class="mobile-card">
+              <div class="mobile-card-title">🖥 Cluttered design</div>
+              <div class="mobile-card-text">Too much visual noise loses customers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="kit-block-title">Spacing Scale</div>
+        <div class="spacing-viz">
+          <div class="spacing-item"><div class="spacing-block" style="width:4px;"></div><span class="spacing-meta">4px — micro (icon gaps)</span></div>
+          <div class="spacing-item"><div class="spacing-block" style="width:8px;"></div><span class="spacing-meta">8px — xs (tight elements)</span></div>
+          <div class="spacing-item"><div class="spacing-block" style="width:16px;"></div><span class="spacing-meta">16px — sm (element gap)</span></div>
+          <div class="spacing-item"><div class="spacing-block" style="width:24px;"></div><span class="spacing-meta">24px — md (card padding)</span></div>
+          <div class="spacing-item"><div class="spacing-block" style="width:32px;"></div><span class="spacing-meta">32px — lg (section pad)</span></div>
+          <div class="spacing-item"><div class="spacing-block" style="width:48px;"></div><span class="spacing-meta">48px — xl (block gap)</span></div>
+          <div class="spacing-item"><div class="spacing-block" style="width:64px;"></div><span class="spacing-meta">64px — 2xl (section gap)</span></div>
+          <div class="spacing-item"><div class="spacing-block" style="width:96px;"></div><span class="spacing-meta">96px — 3xl (hero padding)</span></div>
+        </div>
+        <div style="margin-top:1.5rem;">
+          <div class="kit-block-title">Border Radius Scale</div>
+          <div class="row" style="margin-top:0.5rem;">
+            <div style="width:32px; height:32px; background:var(--clay); border-radius:0; display:flex; align-items:center; justify-content:center; font-size:0.55rem; color:white; font-weight:700;">0</div>
+            <div style="width:32px; height:32px; background:var(--clay); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.55rem; color:white; font-weight:700;">4</div>
+            <div style="width:32px; height:32px; background:var(--clay); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:0.55rem; color:white; font-weight:700;">8</div>
+            <div style="width:32px; height:32px; background:var(--clay); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:0.55rem; color:white; font-weight:700;">12</div>
+            <div style="width:32px; height:32px; background:var(--clay); border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:0.55rem; color:white; font-weight:700;">∞</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TYPOGRAPHY SCALE -->
+<div class="section">
+  <div class="section-label">Typography Scale</div>
+  <div class="kit-block">
+    <div class="type-scale">
+      <div class="type-item"><span class="type-meta">Display · Playfair 700 · 48px</span><span style="font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:700; color:var(--bark);">Your Business</span></div>
+      <div class="type-item"><span class="type-meta">H1 · Playfair 700 · 36px</span><span style="font-family:'Playfair Display',serif; font-size:1.9rem; font-weight:700; color:var(--bark);">Built to Convert</span></div>
+      <div class="type-item"><span class="type-meta">H2 · Playfair 600 · 28px</span><span style="font-family:'Playfair Display',serif; font-size:1.45rem; font-weight:600; color:var(--clay);">Why your website matters</span></div>
+      <div class="type-item"><span class="type-meta">H3 · Nunito 700 · 20px</span><span style="font-size:1.1rem; font-weight:700; color:var(--bark);">Section subheading</span></div>
+      <div class="type-item"><span class="type-meta">Body · Nunito 400 · 16px</span><span style="font-size:0.88rem; color:var(--muted); line-height:1.6;">Most small business websites are built to share information, not to convert. We fix that with research-backed design.</span></div>
+      <div class="type-item"><span class="type-meta">Small · Nunito 600 · 13px</span><span style="font-size:0.75rem; font-weight:600; color:var(--muted);">Caption text · Source attribution · Helper hint</span></div>
+      <div class="type-item" style="border-bottom:none;"><span class="type-meta">Label · Nunito 700 · 11px · CAPS</span><span style="font-size:0.68rem; font-weight:700; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase;">Section label · Category tag</span></div>
+    </div>
+  </div>
+</div>
+
+<footer>ExperienceWithJair · Expanded UI Kit v2.0 · Capstone Development Milestone · Prof. Isi Barreiro</footer>
+
+</body>
+</html>
